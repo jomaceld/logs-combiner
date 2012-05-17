@@ -1,4 +1,15 @@
-﻿using System;
+﻿/**************************
+ *     Logs Combiner      *
+ *-------------------------
+ * Jose A Maestre Celdran *
+ *************************/
+/* 
+ * Usage e.g.: logsextractor-csharp.exe -f "%ut;%vn;%v;%vn;%v;%vn;%v" "C\:dir\subdir\filename1;filename2;filename3"
+ *
+ */
+
+ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,12 +53,6 @@ namespace ConsoleApplication1
                 }
             }
 
-            
-            //readFile("C:\\Users\\LAX\\Desktop\\Nueva carpeta\\8-02-2012\\Clio 2012 02 07\\ACC_07_02_2012_08h_01mn_18sec.csv",
-              //       "%ut;%vn;%v;%vn;%v;%vn;%v",true);
-
-           // readFile("C:\\Users\\LAX\\Desktop\\Nueva carpeta\\8-02-2012\\Clio 2012 02 07\\can-MID_2012-02-07_07-43-30.log",
-             //        "%ut;%i;%v",true);
 
             variablesNames.Sort();
 
