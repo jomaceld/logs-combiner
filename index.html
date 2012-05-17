@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Logs-combiner : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Logs-combiner</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/jomaceld/logs-combiner">View on GitHub</a>
+
+          <h1 id="project_title">Logs-combiner</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/jomaceld/logs-combiner/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/jomaceld/logs-combiner/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>logs-combiner</h1>
+
+<p>Combine two or more logs files in to a resulting log file that will be ordered by the column marked as timestamp.</p>
+
+<p>Usage: logscombiner-cshap.exe -f "format" "files" -f ...</p>
+
+<p>-f:</p>
+
+<pre><code>Indicates that there is a new group of files using the format expressed. 
+</code></pre>
+
+<p>format:</p>
+
+<pre><code>String that indicates the format used in the log files. The fields should be separated with the ';' character.
+possible options are:
+
+- %ut --&gt; Unix Timestamp
+- %v  --&gt; Value
+- %vn --&gt; Value Name
+
+e.g. the string "%t;%v;%v;%vn;%vn" will be evaluated as Time,Value1,Value2,ValueName1,ValueName2
+</code></pre>
+
+<p>files:</p>
+
+<pre><code>Indicates the absolute or relative path to the files that will be evaluated with the format expressed before, 
+followed by the files in that path. To indicate more than one file, they should be separated with the character ';'.
+
+e.g The string "C:\dir\subdir\filename1;filename2" will analyze the files filename1 and filename2 in the folder 
+C:\dir\subdir\
+</code></pre>
+
+<hr><p>Last revision: 17 May 2012</p>
+
+<p>Jose A Maestre Celdran</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Logs-combiner maintained by <a href="https://github.com/jomaceld">jomaceld</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
