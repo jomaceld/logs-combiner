@@ -32,4 +32,5 @@ files:
 Last revision: 17 May 2012
 
 Jose A Maestre Celdran
-futuredrama.net/jomaceld
+
+http://www.futuredrama.net/jomaceld
