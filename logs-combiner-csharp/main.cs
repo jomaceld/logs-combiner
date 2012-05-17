@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleApplication1
+namespace logsextractor
 {
     class main
     {
@@ -104,11 +104,10 @@ namespace ConsoleApplication1
         /// Sintax (each type of value must be separated by ';'):
         /// 
         /// %ut --> Linux timeStamp
-        /// %i --> ID
         /// %v --> Value
         /// %vn -- Value Name
         /// 
-        /// e.g. "%t;%i;%v;%v;%vn;%vn" --> Time,ID,Value1,Value2,ValueName1,ValueName2
+        /// e.g. "%t;%v;%v;%vn;%vn" --> Time,ID,Value1,Value2,ValueName1,ValueName2
         /// </param>
         /// /// <param name="excludeFirstLine">Boolean. True --> exclude first line from the analysis.</param>
         public static void readFile(string fileName,string format, bool excludeFirstLine)
@@ -141,7 +140,6 @@ namespace ConsoleApplication1
                         {
                             List<string> values = new List<string>();
                             List<string> valueNames = new List<string>();
-                            string id = "";
                             string timestamp = "";
 
                             for (int i = 0; i < splittedLine.Length; i++)
@@ -151,10 +149,6 @@ namespace ConsoleApplication1
                                 {
                                     values.Add(splittedLine[i]);
 
-                                }
-                                else if (type == "%i")
-                                {
-                                    id = splittedLine[i];
                                 }
                                 else if (type == "%ut")
                                 {
@@ -169,12 +163,6 @@ namespace ConsoleApplication1
                                     }
                                 }
                             }
-
-                            if(valueNames.Count == 0)
-                                valueNames.Add(id);
-
-                            if (!variablesNames.Contains(id) && id.Length > 0)
-                                variablesNames.Add(id);
  
                             if (verbose)
                             {
