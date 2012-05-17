@@ -40,7 +40,7 @@ namespace logsextractor
                     i++;
                     string format = args[i];
                     i++;
-                    Console.WriteLine(args[i]);
+                   
                     string path = args[i].Substring(0,args[i].LastIndexOf('\\'));
                     string[] files = args[i].Substring(args[i].LastIndexOf('\\')+1).Split(';');
 
@@ -50,6 +50,19 @@ namespace logsextractor
                         readFile(path +"\\"+ file,format, true);
                     }
                     // Usage e.g.: -f "%ut;%vn;%v;%vn;%v;%vn;%v" "C\:dir\subdir\filename1;filename2;filename3"
+                } else if (args[i] == "-nmea")
+                {
+                    i++;
+                    
+                    string path = args[i].Substring(0,args[i].LastIndexOf('\\'));
+                    string[] files = args[i].Substring(args[i].LastIndexOf('\\')+1).Split(';');
+
+                    foreach (string file in files)
+                    {
+                        Console.WriteLine(file);
+                        readNmeaGPRMCFile(path + "\\" + file);
+                    }
+                    
                 }
             }
 
@@ -167,7 +180,6 @@ namespace logsextractor
                             if (verbose)
                             {
                                 Console.Write("line: " + counter);
-                                Console.Write("\tid: " + id);
                                 Console.WriteLine("\tTimestamp: " + timestamp);
                                 int auxCont = 0;
                                 foreach (string auxvalue in values)
@@ -209,5 +221,90 @@ namespace logsextractor
             }
             file.Close(); 
         }
+
+        public static double convertToUnixTimestamp(DateTime date)
+        {
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0); //epoch
+            TimeSpan diff = date - dtDateTime;
+            return Math.Floor(diff.TotalSeconds);
+        }
+
+        public static void readNmeaGPRMCFile(string fileName)
+        {
+            variablesNames.Add("GPS_Status");
+            variablesNames.Add("GPS_Latitude");
+            variablesNames.Add("GPS_Longitude");
+            variablesNames.Add("GPS_Speed_Knots");
+
+            if (verbose){
+                Console.WriteLine("Reading .Nmea GPS file: " + fileName);
+            }
+            
+            int counter = 0;
+            string line;
+
+            System.IO.StreamReader file = new System.IO.StreamReader(fileName);
+
+            while ((line = file.ReadLine()) != null)
+            {
+                string[] parts = line.Split(',');
+
+                Console.WriteLine(line);
+
+                if (parts.Length == 13 && parts[0] == "$GPRMC")
+                {
+                    string GPS_Status = "valid";
+                    if(parts[2] == "V")
+                        GPS_Status = "warning";
+
+                    string GPS_Latitude= parts[3]+","+parts[4];
+                    string GPS_Longitude = parts[5]+","+parts[6];
+                    string GPS_Speed = parts[7];
+
+                    int day = int.Parse(parts[9].Substring(0,2));
+                    int month = int.Parse(parts[9].Substring(2,2));
+                    int year = int.Parse("20"+parts[9].Substring(4,2));
+
+                    int hh = int.Parse(parts[1].Substring(0, 2));
+                    int mm = int.Parse(parts[1].Substring(2, 2));
+                    int ss = int.Parse(parts[1].Substring(4, 2));
+                    int fss = 0;
+                    if(parts[1].Length == 8)
+                        fss = int.Parse(parts[1].Substring(6, 2));
+
+                    
+                    DateTime time = new DateTime(year,month,day, hh,mm,ss,fss);
+                    string timestamp = convertToUnixTimestamp(time).ToString();
+                    
+
+                    if (!dataDictionary.Keys.Contains(timestamp))
+                    {
+                        Dictionary<string, string> d = new Dictionary<string, string>();
+                        d.Add("GPS_Status", GPS_Status);
+                        d.Add("GPS_Latitude", GPS_Latitude);
+                        d.Add("GPS_Longitude", GPS_Longitude);
+                        d.Add("GPS_Speed_Knots", GPS_Speed);
+
+                        dataDictionary.Add(timestamp, d);
+                    }
+                    else
+                    {
+                        Dictionary<string, string> d = dataDictionary[timestamp];
+                        if(!d.Keys.Contains("GPS_Status"))
+                            d.Add("GPS_Status", GPS_Status);
+                        if (!d.Keys.Contains("GPS_Latitude"))
+                            d.Add("GPS_Latitude", GPS_Latitude);
+                        if (!d.Keys.Contains("GPS_Longitude"))
+                            d.Add("GPS_Longitude", GPS_Longitude);
+                        if (!d.Keys.Contains("GPS_Speed_Knots"))
+                            d.Add("GPS_Speed_Knots", GPS_Speed);
+                    }
+                    
+               }
+
+                counter++;
+            }
+            file.Close();
+        }          
     }
 }
